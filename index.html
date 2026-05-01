@@ -3,251 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payg'ambarimiz hayoti - 100 talik Quiz</title>
+    <title>Kitobxonlik Test</title>
     <style>
-        :root { --primary: #1a5d1a; --secondary: #f4bb44; --bg: #f0f2f5; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
-        .container { background: white; width: 100%; max-width: 850px; margin: 20px; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 10px solid var(--primary); }
-        .auth-form { max-width: 400px; margin: 20px auto; display: flex; flex-direction: column; gap: 12px; }
-        input { padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; outline: none; }
-        input:focus { border-color: var(--primary); }
-        .quiz-header { display: flex; justify-content: space-between; font-weight: bold; color: var(--primary); margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        .question { font-size: 20px; font-weight: bold; color: #333; margin-bottom: 20px; min-height: 50px; line-height: 1.4; }
-        .options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
-        .option { padding: 15px; background: #fff; border: 2px solid #eee; border-radius: 12px; cursor: pointer; transition: 0.2s; text-align: center; font-size: 15px; display: flex; align-items: center; justify-content: center; }
-        .option:hover { border-color: var(--primary); background: #f0f9f0; transform: translateY(-2px); }
-        .leaderboard-section { margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; }
-        .leaderboard { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
-        .leaderboard th, .leaderboard td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
-        .leaderboard th { background: var(--primary); color: white; }
-        button { padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; }
-        button:hover { background: #144614; opacity: 0.9; }
+        :root { --primary: #1a5d1a; --bg: #f4f7f6; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
+        .container { background: white; width: 100%; max-width: 900px; margin: 20px; padding: 30px; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); border-top: 8px solid var(--primary); }
+        .auth-box { text-align: center; }
+        .input-group { margin: 15px 0; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+        input { width: 80%; max-width: 350px; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; outline: none; }
+        .btn { padding: 12px 30px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
+        .btn:hover { background: #134613; transform: translateY(-2px); }
+        .question { font-size: 20px; font-weight: bold; margin: 20px 0; color: #333; line-height: 1.4; }
+        .options { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .option { padding: 15px; background: #fff; border: 2px solid #eee; border-radius: 10px; cursor: pointer; text-align: center; transition: 0.2s; font-weight: 500; }
+        .option:hover { border-color: var(--primary); background: #e8f5e9; }
         .hidden { display: none; }
-        @media (max-width: 600px) { .options { grid-template-columns: 1fr; } }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        th { background: var(--primary); color: white; }
+        .badge { background: #f4bb44; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 14px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="auth-box">
-        <h1 style="text-align:center; color: var(--primary);">Islomiy Quiz</h1>
-        <p style="text-align:center; color: #666;">"Suyukli payg'ambarim bilan 365 kun" kitobi asosida</p>
-        <div class="auth-form">
+    <div id="auth-box" class="auth-box">
+        <h1 style="color: var(--primary);">🌙 Test</h1>
+        <p><i> Kitob asosida</i></p>
+        <div class="input-group">
             <input type="text" id="username" placeholder="Ismingizni kiriting...">
-            <input type="text" id="userclass" placeholder="Sinfingizni kiriting (masalan: 6-A)...">
-            <button onclick="startQuiz()">Testni boshlash</button>
+            <input type="text" id="userclass" placeholder="Sinfingiz (masalan: 6-A)...">
+            <button class="btn" onclick="handleLogin()">Kirish</button>
         </div>
     </div>
 
-    <div id="quiz-container" class="hidden">
-        <div class="quiz-header">
-            <span id="u-info"></span>
-            <span id="q-progress">1 / 100</span>
+    <div id="quiz-box" class="hidden">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+            <span id="user-display" style="font-weight: bold; color: var(--primary);"></span>
+            <span class="badge" id="q-info">Savol: 1 / 100</span>
         </div>
         <div class="question" id="q-text"></div>
-        <div class="options" id="options-box"></div>
+        <div class="options" id="options-container"></div>
+    </div>
 
-        <div class="leaderboard-section">
-            <h3 style="text-align:center">🏆 Jonli Reyting</h3>
-            <table class="leaderboard" id="score-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Ism</th>
-                        <th>Sinf</th>
-                        <th>Ball</th>
-                        <th>%</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+    <div id="admin-panel" class="hidden">
+        <h2 style="color: var(--primary);">📊 Mehriniso Ustoz - Natijalar</h2>
+        <table id="results-table">
+            <thead>
+                <tr><th>#</th><th>O'quvchi</th><th>Sinf</th><th>Ball</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div style="margin-top: 20px; display: flex; gap: 10px;">
+            <button class="btn" style="background: #666;" onclick="location.reload()">Chiqish</button>
+            <button class="btn" style="background: #d9534f;" onclick="clearData()">Tozalash</button>
         </div>
     </div>
 
-    <div id="result-box" class="hidden" style="text-align:center">
-        <h2>Tabriklaymiz!</h2>
-        <p>Sizning natijangiz Telegram orqali yuborildi.</p>
-        <h1 id="final-score" style="color: var(--primary); font-size: 55px; margin: 10px 0;">0</h1>
-        <p id="final-rank" style="font-size: 18px; margin-bottom: 20px;"></p>
-        <button onclick="location.reload()" style="width: 100%">Boshiga qaytish</button>
+    <div id="result-box" class="hidden" style="text-align: center;">
+        <h2 style="color: var(--primary);">Test yakunlandi!</h2>
+        <p>Siz 100 ta savoldan <b id="score-val" style="font-size: 40px;">0</b> ta to'g'ri topdingiz.</p>
+        <button class="btn" onclick="location.reload()">Qaytish</button>
     </div>
 </div>
 
 <script>
-    const questions = [
-        {q: "Payg'ambarimiz (s.a.v.)ning otalarining ismi nima?", a: ["Abdulmutallib", "Abu Tolib", "Abdulloh", "Abbos"], c: 2},
-        {q: "Muhammad (s.a.v.)ning onalarining ismi nima?", a: ["Omina", "Halima", "Fotima", "Safiyya"], c: 0},
-        {q: "Payg'ambarimiz (s.a.v.) qaysi shaharda dunyoga kelganlar?", a: ["Madina", "Makka", "Toif", "Shom"], c: 1},
-        {q: "Fil voqeasida Ka'bani buzmoqchi bo'lgan shaxs kim?", a: ["Abu Jahl", "Namrud", "Abraha", "Fir'avn"], c: 2},
-        {q: "Abrahaning eng katta filining ismi nima edi?", a: ["Kasva", "Mahmud", "Bo'roq", "Namir"], c: 1},
-        {q: "Ka'bani himoya qilish uchun Alloh yuborgan qushlar nomi nima?", a: ["Abobil", "Humo", "Lochin", "Qaldirg'och"], c: 0},
-        {q: "Payg'ambarimiz (s.a.v.)ning bobolarining ismi nima?", a: ["Hoshim", "Abdumanaf", "Abdulmutallib", "Abu Tolib"], c: 2},
-        {q: "Muhammad (s.a.v.) qaysi yilda tug'ilganlar?", a: ["Ot yili", "Fil yili", "Quyon yili", "Tuya yili"], c: 1},
-        {q: "Abdulloh (Payg'ambarimizning otalari) qayerda vafot etgan?", a: ["Madinada", "Makkada", "Shomda", "Misrda"], c: 0},
-        {q: "Payg'ambarimiz tug'ilganlarida qaysi saroyning ustunlari qulab tushgan?", a: ["Rim saroyi", "Fors kisrosi saroyi", "Misr saroyi", "Habashiston"], c: 1},
-        {q: "Muhammad ismining ma'nosi nima?", a: ["Go'zal", "Kuchli", "Maqtovga loyiq", "Ishonchli"], c: 2},
-        {q: "Payg'ambarimizni emizgan birinchi ayol kim?", a: ["Suvayba", "Halima", "Omina", "Baraka"], c: 0},
-        {q: "Banu Sa'd qabilasidan bo'lgan mashhur sut onalari kim?", a: ["Shifo", "Omina", "Halima", "Fotima"], c: 2},
-        {q: "Halima onamiz Muhammadni olganidan keyin xonadonida nima ko'paydi?", a: ["Oltin", "Baraka va sut", "Tuya", "Xurmo"], c: 1},
-        {q: "Payg'ambarimiz Halima onamizning uyida necha yil yashadilar?", a: ["2 yil", "4 yil", "6 yil", "8 yil"], c: 1},
-        {q: "Muhammad (s.a.v.)ning emikdosh singlisining ismi nima?", a: ["Ruqiya", "Shaymo", "Zaynab", "Ummu Kulsum"], c: 1},
-        {q: "Shaqqus-sadr (Ko'krak yorilishi) voqeasi u zot necha yoshida bo'lgan?", a: ["2 yoshda", "4 yoshda", "6 yoshda", "10 yoshda"], c: 1},
-        {q: "Payg'ambarimiz necha yoshlarida onalari vafot etdi?", a: ["4 yoshda", "6 yoshda", "8 yoshda", "12 yoshda"], c: 1},
-        {q: "Omina onamiz vafot etgan joy nomi nima?", a: ["Qubo", "Badr", "Abvo", "Uhud"], c: 2},
-        {q: "Onalari vafotidan so'ng Makkaga u zotni kim olib keldi?", a: ["Abu Tolib", "Abdulmutallib", "Ummu Ayman", "Halima"], c: 2},
-        {q: "Payg'ambarimiz 6 yoshdan 8 yoshgacha kimning qaramog'ida bo'ldilar?", a: ["Abdulmutallib", "Abu Tolib", "Hamza", "Abbos"], c: 0},
-        {q: "Abdulmutallib vafot etganida necha yoshda edi?", a: ["70", "82", "90", "63"], c: 1},
-        {q: "Bobolari vafotidan so'ng u zotga kim homiylik qildi?", a: ["Abu Lahab", "Abbos", "Abu Tolib", "Hamza"], c: 2},
-        {q: "Abu Tolib Muhammadni qayerga savdo safariga olib bordi?", a: ["Yamanga", "Shomga", "Misrga", "Iroqqa"], c: 1},
-        {q: "Shom safarida ularni uchratgan rohibning ismi?", a: ["Varaqa", "Bahiro", "Nastura", "Salmon"], c: 1},
-        {q: "Bahiro u zotni nimasidan tanidi?", a: ["Boyligidan", "Gapidan", "Bulut soyabonligi va muhrdan", "Kiyimidan"], c: 2},
-        {q: "Payg'ambarimiz o'smirliklarida qaysi kasb bilan shug'ullanganlar?", a: ["Cho'ponlik", "Temirchilik", "Dehqonchilik", "Baliqchilik"], c: 0},
-        {q: "Al-Amin laqabi nima ma'noni anglatadi?", a: ["Aqlli", "Chiroyli", "Ishonchli", "Botir"], c: 2},
-        {q: "Hilful-fuzul ittifoqi nima maqsadda tuzilgan?", a: ["Urush", "Mazlumlarga yordam berish", "Savdo", "Ziyorat"], c: 1},
-        {q: "Hilful-fuzul tuzilganda u zot necha yoshda edilar?", a: ["10", "15", "20", "40"], c: 2},
-        {q: "Abdulmutallibning necha o'g'li bor edi?", a: ["5", "8", "10", "12"], c: 2},
-        {q: "Zamzam qudug'ini tushida ko'rib topgan shaxs kim?", a: ["Abdulloh", "Abdulmutallib", "Abu Tolib", "Qusay"], c: 1},
-        {q: "Payg'ambarimiz necha yoshda yura boshlaganlar?", a: ["6 oylik", "9-10 oylik", "15 oylik", "2 yosh"], c: 1},
-        {q: "Halima onamizning qishlog'ida baraka nimada ko'rindi?", a: ["Oltin", "Echkilar suti", "Yomg'ir", "Bug'doy"], c: 1},
-        {q: "Payg'ambarimizning emikdosh akasining ismi?", a: ["Ali", "Abdulla", "Hamza", "Usoma"], c: 1},
-        {q: "Omina onamiz Madinaga kimlarni ko'rgani borgan edi?", a: ["Savdogarlar", "Qarindoshlarini", "Sayohat", "Do'stlar"], c: 1},
-        {q: "Fijor urushi qanday urush edi?", a: ["Katta g'alaba", "Taqiqlangan oylardagi gunoh urush", "Dengiz urushi", "Makka fethi"], c: 1},
-        {q: "Payg'ambarimiz necha yoshda birinchi marta Shomga bordilar?", a: ["8", "10", "12", "25"], c: 2},
-        {q: "Ummu Ayman kim edi?", a: ["Sut onasi", "Enagasi", "Ammasi", "Xolasi"], c: 1},
-        {q: "Abdulloh vafot etganda u zot necha yoshda edi?", a: ["1", "2", "Tug'ilmagan edi", "5"], c: 2},
-        {q: "Muhammad (s.a.v.) nasablari qaysi payg'ambarga boradi?", a: ["Muso", "Iso", "Ismoil", "Nuh"], c: 2},
-        {q: "Payg'ambarimiz dushanba kuni nechanchi rabiul avvalda tug'ilganlar?", a: ["1-kun", "12-kun", "27-kun", "10-kun"], c: 1},
-        {q: "Abdulmutallib Zamzamni qaysi butlar orasidan topgan?", a: ["Hubal", "Isof va Noila", "Lote", "Uzzo"], c: 1},
-        {q: "Halima onamiz Muhammadni emizganda qaysi tomonini bergan?", a: ["Chap", "O'ng", "Ikkalasini", "Faqat chapini"], c: 1},
-        {q: "Payg'ambarimiz bolalikda qayerda suzishni o'rganganlar?", a: ["Nil", "Furot", "Banu Najjor hovuzi", "Zamzam"], c: 2},
-        {q: "Payg'ambarlik muhri qayerda edi?", a: ["Qo'lda", "Peshonada", "Ikki yelka orasida", "Yuzda"], c: 2},
-        {q: "Abu Tolibning rafiqasi kim edi?", a: ["Omina", "Fotima binti Asad", "Halima", "Safiyya"], c: 1},
-        {q: "Abdulloh necha yoshida vafot etgan?", a: ["18", "25", "40", "50"], c: 1},
-        {q: "Muhammad ismini kim qo'ygan?", a: ["Omina", "Abdulloh", "Abdulmutallib", "Abu Tolib"], c: 2},
-        {q: "Payg'ambarimiz necha oylikda gapira boshlaganlar?", a: ["3", "5", "7", "12"], c: 2},
-        {q: "Makkada qurg'oqchilikda kim duo qilishga chiqdi?", a: ["Abu Lahab", "Abbos", "Muhammad (s.a.v.)", "Hamza"], c: 2},
-        {q: "Payg'ambarimiz yoshligida nima uchun butlarga sig'inmaganlar?", a: ["Qo'rqqanlari uchun", "Alloh saqlagani uchun", "Taqiqlangani uchun", "Vaqt yo'qligi uchun"], c: 1},
-        {q: "Ka'baning kaliti qaysi qabilada edi?", a: ["Banu Sa'd", "Quraysh", "Banu Najjor", "Avs"], c: 1},
-        {q: "Payg'ambarimiz qaysi faslda tug'ilganlar?", a: ["Yoz", "Kuz", "Qish", "Bahor"], c: 3},
-        {q: "Abdulmutallibning asl ismi?", a: ["Shayba", "Hoshim", "Qusay", "G'olib"], c: 0},
-        {q: "Payg'ambarimiz yoshligida qaysi ko'lda suzganlar?", a: ["Nil", "Amudaryo", "Madinadagi hovuz", "Qizil dengiz"], c: 2},
-        {q: "Abu Tolib u zotni qaysi amallaridan tanib olar edi?", a: ["Boyligidan", "Go'zal xulqi va barakasidan", "Kiyimidan", "O'yinidan"], c: 1},
-        {q: "Hilful-fuzul qaysi sahobaning uyida tuzilgan?", a: ["Abu Bakr", "Abdulloh ibn Jud'on", "Umar", "Usmon"], c: 1},
-        {q: "Payg'ambarimiz cho'ponlik qilib nima o'rganganlar?", a: ["Ovchilik", "Sabr va mas'uliyat", "Ot minish", "Savdo"], c: 1},
-        {q: "Onalari Omina necha yoshida vafot etgan?", a: ["20", "30", "40", "50"], c: 1},
-        {q: "Fijor urushida u zot nima qilganlar?", a: ["O'q uzgan", "Amakilariga o'q uzatgan", "Urushmagan", "Qo'mondon bo'lgan"], c: 1},
-        {q: "Muhammad (s.a.v.) 8 yoshida kimning uyiga ko'chdi?", a: ["Abu Lahab", "Abu Tolib", "Abbos", "Hamza"], c: 1},
-        {q: "Bahiro rohib qaysi shaharda u zotni ko'rgan?", a: ["Damashq", "Busro", "Amman", "Makka"], c: 1},
-        {q: "Payg'ambarimiz necha yoshlarida bobosi vafot etdi?", a: ["6", "8", "10", "12"], c: 1},
-        {q: "Abdulmutallib Zamzamni topganda nima qurbonlik qilmoqchi bo'lgan?", a: ["Tuya", "Qo'y", "O'g'li Abdullohni", "Sigir"], c: 2},
-        {q: "Muhammad (s.a.v.) necha yoshida yurishni o'rganganlar?", a: ["6 oylikda", "9 oylikda", "1 yoshda", "2 yoshda"], c: 1},
-        {q: "Payg'ambarimizni emizgan enagasi?", a: ["Halima", "Suvayba", "Ummu Ayman", "Shifo"], c: 1},
-        {q: "Omina onamizning otasining ismi?", a: ["Vahb", "Abdulloh", "Zuhra", "Amr"], c: 0},
-        {q: "Payg'ambarimiz amakisi Hamza u zotdan necha yosh katta?", a: ["10", "2-4", "1", "Tengdosh"], c: 1},
-        {q: "Abdulmutallib u zotni qayerda o'tirg'izardi?", a: ["Uyda", "Ka'ba soyasidagi gilamda", "Ot ustida", "Sahrada"], c: 1},
-        {q: "Shom safarida Muhammad (s.a.v.) nima qilganlar?", a: ["Uxlagan", "Savdo ishlarida yordam bergan", "O'ynagan", "Yugurgan"], c: 1},
-        {q: "Payg'ambarimiz bolalikda juda... bola edilar.", a: ["Sho'x", "Odobli va og'ir", "Yig'loqi", "Qo'rqoq"], c: 1},
-        {q: "Ka'bani buzishga kelgan qo'shin qaysi yilda kelgan?", a: ["Fil yili", "Tuya yili", "Ot yili", "Arslon yili"], c: 0},
-        {q: "Muhammad ismining ma'nosi?", a: ["Go'zal", "Olim", "Maqtovga loyiq", "Kuchli"], c: 2},
-        {q: "Omina onamiz Madinadan qaytayotganda qayerda vafot etdi?", a: ["Qubo", "Abvo", "Badr", "Uhud"], c: 1},
-        {q: "Payg'ambarimiz o'zlarining shaxsiy mollariga qachon ega bo'ldilar?", a: ["5 yoshda", "Cho'ponlik qilganlarida", "Tug'ilganda", "Hech qachon"], c: 1},
-        {q: "Abu Tolib u zotga qanday qaragan?", a: ["O'z o'g'lidek", "Yetimdek", "Ishchidek", "Mehmondek"], c: 0},
-        {q: "Payg'ambarimiz yoshligida qaysi qushlarni ko'rganlar?", a: ["Burgut", "Abobil", "Lochin", "Zag'izg'on"], c: 1},
-        {q: "Fil voqeasida Abraha qayerdan kelgan edi?", a: ["Misr", "Yaman", "Iroq", "Suriya"], c: 1},
-        {q: "Muhammad (s.a.v.) necha oylikda emishdan chiqdi?", a: ["12 oylikda", "24 oylikda", "6 oylikda", "18 oylikda"], c: 1},
-        {q: "Payg'ambarimizni yoshligida kimlar himoya qilgan?", a: ["Hech kim", "Alloh va farishtalar", "Faqat amakisi", "Faqat onasi"], c: 1},
-        {q: "Makkada Zamzam suvi yo'qolib qolganda kim qazigan?", a: ["Abdulloh", "Abdulmutallib", "Qusay", "Abu Tolib"], c: 1},
-        {q: "Payg'ambarimiz tug'ilgan kunda nima o'chib qolgan?", a: ["Quyosh", "Otashparastlar olovi", "Yulduzlar", "Oy"], c: 1},
-        {q: "Muhammad (s.a.v.)ning emikdosh onasi Halima qaysi qishloqdan?", a: ["Makka", "Sahrada (Banu Sa'd)", "Toif", "Madina"], c: 1},
-        {q: "Payg'ambarimiz yoshligida nimalardan qo'rqqanlar?", a: ["Hech narsadan (faqat Allohdan)", "Hayvonlardan", "Urushdan", "Qorong'ulikdan"], c: 0},
-        {q: "Omina onamizning onasining ismi?", a: ["Fotima", "Barra", "Safiyya", "Xolida"], c: 1},
-        {q: "Abdullohning akalaridan eng kattasi?", a: ["Abu Tolib", "Horis", "Abbos", "Hamza"], c: 1},
-        {q: "Payg'ambarimiz tug'ilganda onalari yonida kimlar bo'lgan?", a: ["Doyalar (Shifo va b.)", "Hech kim", "Faqat erlari", "Faqat otasi"], c: 0},
-        {q: "Ka'bani himoya qilish uchun Alloh nima yubordi?", a: ["Askarlar", "Suv", "Abobil qushlari", "Yel"], c: 2},
-        {q: "Muhammad ismini bobosi tanlaganda odamlar hayron bo'ldimi?", a: ["Yo'q", "Ha (ota-bobolarining ismi emasligi uchun)", "Bilmadim", "Hech narsa demadi"], c: 1},
-        {q: "Payg'ambarimiz yoshligida qayerga duo qilib borganlar?", a: ["Tog'larga", "Ka'baga", "Savdoga", "Maktabga"], c: 1},
-        {q: "Fil voqeasidagi eng katta fil ismi?", a: ["Mahmud", "Kasva", "Qasva", "Sher"], c: 0},
-        {q: "Omina onamizning qabilasi?", a: ["Zuhra", "Najjor", "Asad", "Hoshim"], c: 0},
-        {q: "Payg'ambarimiz (s.a.v.) necha yoshda Shomga birinchi marta bordilar?", a: ["8", "12", "15", "25"], c: 1},
-        {q: "Abdulloh vafot etgan yosh?", a: ["25", "40", "18", "50"], c: 0},
-        {q: "Payg'ambarimizning uchinchi sut onalari?", a: ["Suvayba", "Halima", "Omina", "Ummu Ayman"], c: 1},
-        {q: "Bahiro rohib qayerlik edi?", a: ["Misr", "Suriya (Busro)", "Makka", "Madina"], c: 1},
-        {q: "Payg'ambarimiz hayoti kitobda necha kunda yoritilgan?", a: ["100 kun", "365 kun", "30 kun", "360 kun"], c: 1},
-        {q: "Muhammad (s.a.v.)ning barcha ishlari... edi.", a: ["Barakali", "Yomon", "Oddiy", "Qiyin"], c: 0},
-        {q: "Ushbu testdan maqsad nima?", a: ["Shunchaki o'yin", "Payg'ambarimizni (s.a.v.) tanish", "Bilimni sinash", "B va C javoblar"], c: 3}
-    ];
+       // TELEGRAM SOZLAMALARI
+    const TELEGRAM_TOKEN = "8689514408:AAE-pPgmmBVvXuPtQlekY154d_E7DYmY2Ws";    
 
-    let currentIdx = 0, score = 0, uName = "", uClass = "";
-
-    // BOT MA'LUMOTLARINI SHU YERGA YOZING:
-    const TELEGRAM_TOKEN = "8689514408:AAE-pPgmmBVvXuPtQlekY154d_E7DYmY2Ws";
     const TELEGRAM_CHAT_ID = "1944101143";
 
-    function startQuiz() {
+    const questions = [
+        {q: "1. Payg'ambarimiz (s.a.v.)ning otalarining ismi nima?", a: ["Abdulmutallib", "Abu Tolib", "Abdulloh", "Abbos"], c: 2},
+        {q: "2. Muhammad (s.a.v.)ning onalarining ismi nima?", a: ["Omina", "Halima", "Fotima", "Safiyya"], c: 0},
+        {q: "3. Payg'ambarimiz (s.a.v.) qaysi shaharda dunyoga kelganlar?", a: ["Madina", "Makka", "Toif", "Shom"], c: 1},
+        {q: "4. Fil voqeasida Ka'bani buzmoqchi bo'lgan shaxs kim?", a: ["Abu Jahl", "Namrud", "Abraha", "Fir'avn"], c: 2},
+        {q: "5. Abrahaning eng katta filining ismi nima edi?", a: ["Kasva", "Mahmud", "Bo'roq", "Namir"], c: 1},
+        {q: "6. Ka'bani himoya qilish uchun Alloh yuborgan qushlar nomi nima?", a: ["Abobil", "Humo", "Lochin", "Qaldirg'och"], c: 0},
+        {q: "7. Payg'ambarimiz (s.a.v.)ning bobolarining ismi nima?", a: ["Hoshim", "Abdumanaf", "Abdulmutallib", "Abu Tolib"], c: 2},
+        {q: "8. Muhammad (s.a.v.) qaysi yilda tug'ilganlar?", a: ["Ot yili", "Fil yili", "Quyon yili", "Tuya yili"], c: 1},
+        {q: "9. Abdulloh (Payg'ambarimizning otalari) qayerda vafot etgan?", a: ["Madinada", "Makkada", "Shomda", "Misrda"], c: 0},
+        {q: "10. Payg'ambarimiz tug'ilganlarida qaysi saroyning ustunlari qulab tushgan?", a: ["Rim imperatori", "Fors kisrosi", "Misr fir'avni", "Habashiston podshohi"], c: 1},
+        {q: "11. 'Muhammad' ismining ma'nosi nima?", a: ["Go'zal", "Kuchli", "Maqtovga loyiq", "Ishonchli"], c: 2},
+        {q: "12. Payg'ambarimizni emizgan birinchi ayol kim?", a: ["Suvayba", "Halima", "Omina", "Baraka"], c: 0},
+        {q: "13. Banu Sa'd qabilasidan bo'lgan mashhur sut onalari kim?", a: ["Shifo", "Omina", "Halima", "Fotima"], c: 2},
+        {q: "14. Halima onamiz xonadonida nima ko'paydi?", a: ["Oltin", "Baraka va sut", "Tuya", "Xurmo"], c: 1},
+        {q: "15. Halima onamizning uyida necha yil yashadilar?", a: ["2 yil", "4 yil", "6 yil", "8 yil"], c: 1},
+        {q: "16. Muhammad (s.a.v.)ning emikdosh singlisining ismi nima?", a: ["Ruqiya", "Shaymo", "Zaynab", "Ummu Kulsum"], c: 1},
+        {q: "17. 'Ko'krak yorilishi' voqeasi necha yoshlarida sodir bo'lgan?", a: ["2 yoshda", "4 yoshda", "6 yoshda", "10 yoshda"], c: 1},
+        {q: "18. Payg'ambarimiz necha yoshlarida onalari vafot etdi?", a: ["4 yoshda", "6 yoshda", "8 yoshda", "12 yoshda"], c: 1},
+        {q: "19. Omina onamiz vafot etgan qishloq nomi nima?", a: ["Qubo", "Badr", "Abvo", "Uhud"], c: 2},
+        {q: "20. Onalari vafotidan so'ng Makkaga u zotni kim olib keldi?", a: ["Abu Tolib", "Abdulmutallib", "Ummu Ayman", "Halima"], c: 2},
+        {q: "21. 6 yoshdan 8 yoshgacha kimning qaramog'ida bo'ldilar?", a: ["Bobolari Abdulmutallib", "Amakilari Abu Tolib", "Hamza", "Abbos"], c: 0},
+        {q: "22. Abdulmutallib vafot etganida necha yoshda edi?", a: ["70 yoshda", "82 yoshda", "90 yoshda", "63 yoshda"], c: 1},
+        {q: "23. Bobolari vafotidan so'ng u zotga kim homiylik qildi?", a: ["Abu Lahab", "Abbos", "Abu Tolib", "Hamza"], c: 2},
+        {q: "24. Abu Tolib u zotni qayerga savdo safariga olib bordi?", a: ["Yamanga", "Shomga", "Misrga", "Iroqqa"], c: 1},
+        {q: "25. Shom safarida ularni uchratgan rohibning ismi nima?", a: ["Varaqa", "Bahiro", "Nastura", "Salmon"], c: 1},
+        {q: "26. Bahiro u zotni nimalaridan payg'ambar bo'lishini bildi?", a: ["Boyligidan", "Gaplaridan", "Bulut soyasi va muhrdan", "Kiyimidan"], c: 2},
+        {q: "27. Payg'ambarimiz o'smirliklarida qaysi kasb bilan shug'ullanganlar?", a: ["Cho'ponlik", "Temirchilik", "Dehqonchilik", "Baliqchilik"], c: 0},
+        {q: "28. 'Al-Amin' laqabi nima ma'noni anglatadi?", a: ["Aqlli", "Chiroyli", "Ishonchli", "Botir"], c: 2},
+        {q: "29. 'Hilful-fuzul' ittifoqi nima maqsadda tuzilgan edi?", a: ["Urush qilish", "Mazlumlarga yordam berish", "Savdo", "Ka'bani yuvish"], c: 1},
+        {q: "30. 'Hilful-fuzul' tuzilganda necha yoshda edilar?", a: ["10 yoshda", "15 yoshda", "20 yoshda", "40 yoshda"], c: 2},
+        {q: "31. Amakilaridan kim u zotni doim himoya qilgan?", a: ["Abu Lahab", "Abu Tolib", "Abbos", "Horis"], c: 1},
+        {q: "32. Abdulmutallibning necha o'g'li bor edi?", a: ["5 ta", "8 ta", "10 ta", "12 ta"], c: 2},
+        {q: "33. Zamzamni tushida ko'rib, qayta topgan shaxs kim?", a: ["Abdulloh", "Abdulmutallib", "Abu Tolib", "Qusay"], c: 1},
+        {q: "34. Payg'ambarimiz necha yoshlarida yura boshlaganlar?", a: ["6 oyligida", "9-10 oyligida", "15 oyligida", "2 yoshida"], c: 1},
+        {q: "35. Halima onamizning qishlog'ida baraka nimada ko'rindi?", a: ["Oltin", "Echkilar suti", "Yomg'ir", "Bug'doy"], c: 1},
+        {q: "36. Payg'ambarimizning emikdosh akasining ismi?", a: ["Ali", "Abdulla", "Hamza", "Usoma"], c: 1},
+        {q: "37. Omina onamiz Madinaga nima uchun borgan edi?", a: ["Savdo", "Qarindoshlarini ko'rish", "Sayohat", "Yashash"], c: 1},
+        {q: "38. 'Al-Amin' deb tanilishlariga asosiy sabab nima?", a: ["Boylik", "Yolg'on gapirmaslik", "Kuch", "Kiyim"], c: 1},
+        {q: "39. Bahiro Abu Tolibga nima dedi?", a: ["Olim qiling", "Darhol Makkaga qaytaring", "Menga qoldiring", "Savdo qiling"], c: 1},
+        {q: "40. Necha yoshlarida bobosidan ayrildilar?", a: ["6 yoshda", "8 yoshda", "10 yoshda", "12 yoshda"], c: 1},
+        {q: "41. To'ylarga bormoqchi bo'lganlarida nima bo'lgan?", a: ["Ruxsat yo'q", "Alloh uxlab qoldirgan", "Yomg'ir", "Adashganlar"], c: 1},
+        {q: "42. Payg'ambarimizning onalari qaysi qabiladan edi?", a: ["Banu Sa'd", "Banu Zuhra", "Banu Asad", "Banu Hoshim"], c: 1},
+        {q: "43. Abdulloh vafot etganida Muhammad (s.a.v.) necha yoshda edilar?", a: ["1 yoshda", "2 yoshda", "Hali tug'ilmagan", "5 yoshda"], c: 2},
+        {q: "44. 'Fijor' urushi qachon sodir bo'lgan?", a: ["Ramazon", "Taqiqlangan oylarda", "Qishda", "Makka fethida"], c: 1},
+        {q: "45. Necha yoshlarida birinchi marta Shomga bordilar?", a: ["8 yoshda", "10 yoshda", "12 yoshda", "25 yoshda"], c: 2},
+        {q: "46. Nasablari qaysi payg'ambarga borib taqaladi?", a: ["Muso", "Iso", "Ismoil", "Nuh"], c: 2},
+        {q: "47. Cho'ponlikda nimalarni o'rgandilar?", a: ["Ot minish", "Sabrli bo'lish", "Ovchilik", "Qurilish"], c: 1},
+        {q: "48. Abdulmutallib u zotni kimga topshirdi?", a: ["Abu Lahab", "Abu Tolib", "Abbos", "Hamza"], c: 1},
+        {q: "49. Ummu Ayman kim edi?", a: ["Sut onasi", "Enagasi", "Ammasi", "Xolasi"], c: 1},
+        {q: "50. Bolaliklarida qanday duo qilganlar?", a: ["Ovqat", "Bismillah deb boshlagan", "Duo qilmagan", "Faqat bobosi aytganini"], c: 1},
+        {q: "51. Otalari Abdulloh qayerga dafn etilgan?", a: ["Makka", "Madina", "Toif", "Quddus"], c: 1},
+        {q: "52. Tug'ilgan kuni haftaning qaysi kuni edi?", a: ["Juma", "Shanba", "Dushanba", "Chorshanba"], c: 2},
+        {q: "53. Abdulmutallib Zamzamni qayerdan topgan?", a: ["Ikki but", "Isof va Noila orasidan", "Ka'ba ichidan", "Safodan"], c: 1},
+        {q: "54. Halima onamiz Muhammad (s.a.v.)ga qaysi tomondagi sutini bergan?", a: ["Chap", "O'ng", "Ikkisini", "Faqat chap"], c: 1},
+        {q: "55. 4 yoshida Halima onamiz bilan qayerda yashagan?", a: ["Shaharda", "Sahrada", "Tog'da", "Madinada"], c: 1},
+        {q: "56. Payg'ambarimizning emikdosh akasining ismi?", a: ["Ali", "Abdulla", "Hamza", "Mas'ud"], c: 1},
+        {q: "57. Omina onamiz vafot etganida necha yoshda edi?", a: ["25 yoshda", "30 yoshda", "40 yoshda", "50 yoshda"], c: 1},
+        {q: "58. Abdulmutallib u zotni qayerda o'tirg'izardi?", a: ["Uy to'rida", "Ka'ba soyasidagi gilamda", "Otida", "Tuyasida"], c: 1},
+        {q: "59. Yoshligida qaysi urushda qatnashganlar?", a: ["Badr", "Uhud", "Fijor", "Xandaq"], c: 2},
+        {q: "60. Hilful-fuzul qaysi sahobaning uyida tuzilgan?", a: ["Abu Bakr", "Abdulloh ibn Jud'on", "Umar", "Usmon"], c: 1},
+        {q: "61. Bahiro u zotni qaysi shaharda ko'rgan?", a: ["Damashq", "Busro", "Amman", "Quddus"], c: 1},
+        {q: "62. Amakisi Hamza u zotdan necha yosh katta?", a: ["10 yosh", "2-4 yosh", "1 yosh", "Tengdosh"], c: 1},
+        {q: "63. 'Al-Amin' laqabini kimlar bergan?", a: ["Oila", "Butun Makka", "Faqat bobosi", "Do'stlari"], c: 1},
+        {q: "64. Nima uchun butlarga sig'inmaganlar?", a: ["Taqiqlangan", "Alloh saqlagani uchun", "Qo'rquv", "Vaqt yo'q"], c: 1},
+        {q: "65. Abdullohning onasining ismi?", a: ["Omina", "Fotima binti Amr", "Barra", "Arva"], c: 1},
+        {q: "66. Muhammad (s.a.v.)ning tug'ilgan oyi qaysi?", a: ["Ramazon", "Rajab", "Rabiul avval", "Zulhijja"], c: 2},
+        {q: "67. Ka'ba kaliti qaysi qabilada edi?", a: ["Banu Sa'd", "Quraysh", "Banu Najjor", "Avs"], c: 1},
+        {q: "68. Eng sevimli amakilari kim bo'lgan?", a: ["Abu Lahab", "Abu Tolib va Hamza", "Horis", "Zubayr"], c: 1},
+        {q: "69. Bolalikda qaysi ko'lda suzishni o'rganganlar?", a: ["Nil", "Furot", "Banu Najjor hovuzi", "Zamzam"], c: 2},
+        {q: "70. Halima onamizning eri kim edi?", a: ["Horis ibn Abduluzzo", "Abu Tolib", "Abbos", "Utba"], c: 0},
+        {q: "71. Yelkalaridagi belgi nima deb ataladi?", a: ["Xol", "Payg'ambarlik muhri", "Chandiq", "Nur"], c: 1},
+        {q: "72. Enagasi Ummu Ayman qayerlik edi?", a: ["Makka", "Habashistonlik", "Madinalik", "Yamallik"], c: 1},
+        {q: "73. 8 yoshida kimning uyiga ko'chib o'tdi?", a: ["Abbos", "Abu Tolib", "Hamza", "Xolasi"], c: 1},
+        {q: "74. Abu Tolibning rafiqasi kim edi?", a: ["Omina", "Fotima binti Asad", "Halima", "Safiyya"], c: 1},
+        {q: "75. Ismini bobosi tanlaganida odamlar nima dedi?", a: ["Yaxshi", "Nega ota-bobong ismini qo'ymading?", "G'alati", "Biz ham"], c: 1},
+        {q: "76. Necha yoshida ilk bor savdo qilishni o'rgandilar?", a: ["5 yoshda", "8 yoshda", "12 yoshda", "20 yoshda"], c: 2},
+        {q: "77. Yolg'on gapirmaganlari uchun yana nima deb atalganlar?", a: ["Botir", "Sodiq", "Hakim", "Mansur"], c: 1},
+        {q: "78. Muhammad (s.a.v.) kichikligida qanday bola bo'lganlar?", a: ["Sho'x", "Odobli va og'ir-vazmin", "Yig'loqi", "Qo'rqoq"], c: 1},
+        {q: "79. Abdullohning akalari orasida eng kattasi kim?", a: ["Abu Tolib", "Horis", "Abbos", "Hamza"], c: 1},
+        {q: "80. Necha oyliklarida gapira boshlaganlar?", a: ["3 oylik", "5 oylik", "7 oylik", "12 oylik"], c: 2},
+        {q: "81. Omina onamiz vafotida kim yupatdi?", a: ["Abu Tolib", "Ummu Ayman", "Halima", "Abu Lahab"], c: 1},
+        {q: "82. Bobosi necha yoshida vafot etgan?", a: ["63 yoshda", "70 yoshda", "82 yoshda", "95 yoshda"], c: 2},
+        {q: "83. Kitob kimlarga mo'ljallangan?", a: ["Olimlar", "Bolalar va yoshlarga", "Qariyalar", "Ayollar"], c: 1},
+        {q: "84. Qaysi faslda tug'ilganlar?", a: ["Yoz", "Kuz", "Qish", "Bahor"], c: 3},
+        {q: "85. Qurg'oqchilikda Abu Tolib kimni duo qilishga olib chiqdi?", a: ["Abbos", "Muhammadni", "Xotinini", "Hamzani"], c: 1},
+        {q: "86. Abdulmutallibning asl ismi nima edi?", a: ["Shayba", "Hoshim", "Qusay", "G'olib"], c: 0},
+        {q: "87. Yoshliklarida doim... kiyinganlar.", a: ["Qimmatbaho", "Sodda va ozoda", "Rang-barang", "Ipak"], c: 1},
+        {q: "88. 'Al-Amin' yana nima ma'noni anglatadi?", a: ["Kuchli", "Omonatdor", "Bilimli", "Rahmdil"], c: 1},
+        {q: "89. Tug'ilishlaridan oldin dunyoda nimalar ko'paygan?", a: ["Tinchlik", "Zulm va adolatsizlik", "Ilm", "Boylik"], c: 1},
+        {q: "90. Ka'bani kim birinchi bo'lib qurgan?", a: ["Muhammad", "Ibrohim va Ismoil", "Muso", "Nuh"], c: 1},
+        {q: "91. Qo'y boqqanlarida nima qilar edilar?", a: ["Uxlar", "Tabiatni kuzatib, tafakkur", "O'yin", "Ashula"], c: 1},
+        {q: "92. Halima onamiz birinchi ko'rganda nima deb o'yladi?", a: ["Olmaslikni", "Darhol bag'riga bosishni", "Qoldirishni", "Boy bola"], c: 1},
+        {q: "93. Necha yoshlarida shaxsiy mollariga ega bo'lganlar?", a: ["5 yoshda", "10 yoshda", "O'smirlikda", "Tug'ilganlarida"], c: 2},
+        {q: "94. Amakisi Abu Lahab qanday munosabatda edi?", a: ["Yaxshi", "Dushmanlik", "Farqi yo'q", "Yordam"], c: 1},
+        {q: "95. Necha yoshlarida og'ir ishlarni hal qiladigan bo'ldilar?", a: ["10 yoshda", "15 yoshda", "Yoshlik va o'smirlikda", "40 yoshda"], c: 2},
+        {q: "96. Otalari Abdulloh necha yoshida vafot etgan?", a: ["18 yoshda", "25 yoshda", "40 yoshda", "50 yoshda"], c: 1},
+        {q: "97. Tug'ilganda Ominaning yonida kimlar bo'lgan?", a: ["Doyalar", "Shifo va Fotima", "Hech kim", "Amakilari"], c: 1},
+        {q: "98. Hikoyalarda qanday tasvirlangan?", a: ["Qattiqqo'l", "Hamma havas qiladigan nurli bola", "Oddiy", "Kamgap"], c: 1},
+        {q: "99. Ism qo'yish uchun Abdulmutallib qayerga bordi?", a: ["Saroy", "Ka'baga", "Madina", "Sahra"], c: 1},
+        {q: "100. Kitobning maqsadi nima?", a: ["Tarix", "Payg'ambarimizni yaxshi ko'rish va o'xshash", "Ismlar", "O'qishni o'rganish"], c: 1}
+    ];
+
+    let cur = 0, score = 0, uName = "", uClass = "";
+
+    function handleLogin() {
         uName = document.getElementById('username').value.trim();
-        uClass = document.getElementById('userclass').value.trim();
-        if(!uName || !uClass) { alert("Ism va sinfingizni yozing!"); return; }
+        uClass = document.getElementById('userclass').value.trim().toLowerCase();
+        if(!uName || !uClass) return alert("Iltimos to'ldiring!");
+        if(uName === "Mehriniso" && (uClass === "ustoz" || uClass === "o'qituvchi")) {
+            showAdmin();
+        } else {
+            start();
+        }
+    }
 
+    function start() {
         document.getElementById('auth-box').classList.add('hidden');
-        document.getElementById('quiz-container').classList.remove('hidden');
-        document.getElementById('u-info').innerText = uName + " (" + uClass + ")";
-        
-        updateTable();
-        showQuestion();
+        document.getElementById('quiz-box').classList.remove('hidden');
+        document.getElementById('user-display').innerText = uName;
+        render();
     }
 
-    function showQuestion() {
-        if(currentIdx >= questions.length) { finishQuiz(); return; }
-        
-        let q = questions[currentIdx];
-        document.getElementById('q-progress').innerText = (currentIdx + 1) + " / " + questions.length;
-        document.getElementById('q-text').innerText = q.q;
-        
-        let btns = "";
-        q.a.forEach((opt, i) => {
-            btns += `<div class="option" onclick="next(${i})">${opt}</div>`;
+    function render() {
+        if(cur >= questions.length) return finish();
+        document.getElementById('q-info').innerText = `Savol: ${cur+1} / ${questions.length}`;
+        document.getElementById('q-text').innerText = questions[cur].q;
+        let h = "";
+        questions[cur].a.forEach((opt, i) => {
+            h += `<div class="option" onclick="next(${i})">${opt}</div>`;
         });
-        document.getElementById('options-box').innerHTML = btns;
+        document.getElementById('options-container').innerHTML = h;
     }
 
-    function next(idx) {
-        if(idx === questions[currentIdx].c) score++;
-        currentIdx++;
-        showQuestion();
+    function next(i) {
+        if(i === questions[cur].c) score++;
+        cur++;
+        render();
     }
 
-    function updateTable() {
-        let db = JSON.parse(localStorage.getItem('quiz_db_final') || "[]");
-        let tbody = document.querySelector("#score-table tbody");
-        tbody.innerHTML = "";
-        db.sort((a, b) => b.score - a.score);
-        db.slice(0, 10).forEach((u, i) => {
-            tbody.innerHTML += `<tr><td>${i+1}</td><td>${u.name}</td><td>${u.class}</td><td>${u.score}</td><td>${u.percent}%</td></tr>`;
-        });
-    }
-
-    function finishQuiz() {
-        document.getElementById('quiz-container').classList.add('hidden');
+    function finish() {
+        document.getElementById('quiz-box').classList.add('hidden');
         document.getElementById('result-box').classList.remove('hidden');
-        
-        let p = ((score / questions.length) * 100).toFixed(1);
-        document.getElementById('final-score').innerText = score;
+        document.getElementById('score-val').innerText = score;
+        let db = JSON.parse(localStorage.getItem('final_quiz_v1') || "[]");
+        db.push({n: uName, c: uClass.toUpperCase(), s: score});
+        localStorage.setItem('final_quiz_v1', JSON.stringify(db));
+        const msg = `✅ Natija:%0A👤 Ism: ${uName}%0A🏫 Sinf: ${uClass.toUpperCase()}%0A🎯 Ball: ${score}/100`;
+        fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage?chat_id=${TG_CHAT_ID}&text=${msg}`);
+    }
 
-        // Xabar matni
-        const text = `🏆 *YANGI NATIJA* 🏆%0A%0A👤 *Ism:* ${uName}%0A🏫 *Sinf:* ${uClass}%0A🎯 *Ball:* ${score} / ${questions.length}%0A📊 *Foiz:* ${p}%`;
-        
-        // Telegramga yuborish
-        fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${text}&parse_mode=markdown`);
+    function showAdmin() {
+        document.getElementById('auth-box').classList.add('hidden');
+        document.getElementById('admin-panel').classList.remove('hidden');
+        let db = JSON.parse(localStorage.getItem('final_quiz_v1') || "[]");
+        let html = "";
+        db.sort((a,b) => b.s - a.s).forEach((r, i) => {
+            html += `<tr><td>${i+1}</td><td>${r.n}</td><td>${r.c}</td><td>${r.s}</td></tr>`;
+        });
+        document.querySelector("#results-table tbody").innerHTML = html;
+    }
 
-        // LocalStorage ga saqlash
-        let db = JSON.parse(localStorage.getItem('quiz_db_final') || "[]");
-        db.push({name: uName, class: uClass, score: score, percent: p});
-        localStorage.setItem('quiz_db_final', JSON.stringify(db));
-
-        db.sort((a, b) => b.score - a.score);
-        let rank = db.findIndex(u => u.name === uName && u.score === score) + 1;
-        document.getElementById('final-rank').innerHTML = `Jami savollar: ${questions.length}<br>To'g'ri javoblar: <b>${score}</b><br>Hozirgi reytingingiz: <b>${rank}-o'rin</b>`;
+    function clearData() {
+        if(confirm("Tozalash?")) { localStorage.removeItem('final_quiz_v1'); showAdmin(); }
     }
 </script>
 </body>
-</html>
+</html> 
